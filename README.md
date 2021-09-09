@@ -10,6 +10,7 @@ The name is not final.
 
 ### Trauma Elevator
 This is a passion project being slowly developed after we(Lightkeeper's Machine) created its prototype for Ludum Dare 48. It's a twin-stick shooter that takes place entirely inside an elevator, with monsters swarming you in between each floor. Much like games such as Hades or Moonlighter, after you die you can customize your experience, buy power-ups and upgrade your elevator. The idea is that the game takes place inside your mind, as your fight your inner demons in a psychiatric facility.
+Code to be added very soon!
 
 
 
