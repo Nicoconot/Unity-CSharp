@@ -5,7 +5,7 @@ Hey there! Thanks for coming by. My name is Nico, I'm a game developer mostly fo
 
 ### Project Pigment
 This is an ongoing puzzle platformer game being developed for a client. It's got a shooting system, basic enemy AI and several ways to interact with the environment. It's mostly about problem-solving rather than skill. 
-The initial target audience is childrens and teens aged 7-14 yeard old.
+The initial target audience is children and teens aged 7-14 yeard old.
 The name is not final.
 
 ### Trauma Elevator
@@ -19,15 +19,14 @@ Please check out our [itch.io](https://lightkeepersmachine.itch.io/) page. I was
 ----------------
 
 # Projets Publiques Unity C#
-Salut! Merci pour votre interêt. Moi c'est Nico, je suis un développeur de jeux, principalement sur Unity et C#. Ici je partage un peu du code que j'ai crée, pas forcement avec le projet complet(desolé, j'ai pas la permission!). J'ai conçu et crée ces archives (surtout)à partir de zéro, et tout est largement commenté. Si vous avez besoin de quelque chose qui est ici, n'hesitez pas de l'utilizer pour votre projet. J'accept des requêtes aussi!
+Salut! Merci d’être venu jeter un coup d'œil. Moi c'est Nico, je suis développeur de jeux, spécialisé Unity et C#. Ici je partage un peu du code que j'ai écrit (pas forcément tout le projet, faute d'avoir l’autorisation) J'ai assemblé ces archives (presque) à partir de rien, et tout est dûment commenté. Si vous avez besoin de quelque chose, n'hésitez pas à l'utiliser pour votre projet. J'accepte les demandes et les requêtes!
 
 ## Descriptions des Projets
 
 ### Project Pigment
-C'est un jeu de puzzle-platforme en cours de développement pour un client. Il en a un systéme de tir, IA basique pour les ennemis et plusieurs façons d'interagir avec le environnement. Il met l'accent sur les compétences de résolution de problèmes, pas seulement sur les habiletés motrices. 
-Le public cible intiel est les enfants et les adolescents âgés de 7 à 14 ans.
-Le titre n'est pas définitif.
+C'est un jeu de puzzle-plateforme en cours de développement pour un client. Il comporte un système de tir, l’IA basique pour les ennemis et plusieurs façons d'interagir avec l' environnement. Il met l'accent sur les capacités à résoudre des problèmes, pas seulement sur l’habilité motrice. Le public cible initial sont les enfants et les adolescents âgés de 7 à 14 ans. Le titre n'est pas définitif.
 
 ### Trauma Elevator
-Il s'agit d'un projet passionné qui se développe lentement après que nous (Lightkeeper's Machine) avons créé son prototype pour Ludum Dare 48. C'est un jeu de tir à deux bâtons qui se déroule entièrement dans un ascenseur, avec des monstres vous envahissant entre chaque étage. Tout comme des jeux tels que Hades ou Moonlighter, après votre mort, vous pouvez personnaliser votre expérience, acheter des bonus et amèliorer votre ascenseur. L'idée est que le jeu se déroule dans votre esprit, alors que vous combattez vos démons intérieurs dans un établissement psychiatrique.
-Code à ajouter très bientôt ! 
+Il s'agit d'un projet du coeur qui se développe lentement après que nous (Lightkeeper's Machine) ayons créé un prototype pour Ludum Dare 48. C'est un twin-stick shooter qui se déroule entièrement dans un ascenseur, avec des monstres vous envahissant entre chaque étage. Tout comme des rogue-likes tels que Hadès ou Moonlighter, après votre mort, vous pouvez personnaliser votre expérience, acheter des bonus et améliorer votre ascenseur. L'idée est que le jeu se déroule dans votre esprit, alors que vous combattez vos démons intérieurs dans un établissement psychiatrique. Le code arrive très bientôt !
+
+Veuillez consulter notre page [itch.io](https://lightkeepersmachine.itch.io/). Je suis le programmeur de tout ce qui y est presenté, et vous pourrez voir une partie de mon code de première main !
