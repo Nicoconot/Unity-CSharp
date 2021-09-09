@@ -13,7 +13,7 @@ This is a passion project being slowly developed after we(Lightkeeper's Machine)
 Code to be added very soon!
 
 
-Please check out our [https://lightkeepersmachine.itch.io/](itch.io) page. I was the programmer to everything shown there, and you'll be able to see some of my code first hand!
+Please check out our [itch.io](https://lightkeepersmachine.itch.io/) page. I was the programmer to everything shown there, and you'll be able to see some of my code first hand!
 
 
 
