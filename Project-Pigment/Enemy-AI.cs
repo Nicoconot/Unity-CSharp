@@ -4,6 +4,9 @@
 // in front of the enemy in varying heights. Depending on if the raycast detects an object in the layermask provided(in this case, "Ground") for 
 // each detector, an assumption will be made. The enemy can then turn around, jump or simply move forward.
 // The grounded detection system is based off of Brackey's code.
+// I realize it would be much better to use an OOP system for the different enemies, and something like that will be created later on. Right now,
+// it's easier to manage and design a big chunk of mixed code for fast iteration, and I think it's a bit easier to understand from an outside 
+//perspective as well.
 
 using System.Collections;
 using System.Collections.Generic;
