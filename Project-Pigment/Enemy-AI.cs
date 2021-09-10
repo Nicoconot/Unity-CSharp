@@ -5,7 +5,6 @@
 // each detector, an assumption will be made. The enemy can then turn around, jump or simply move forward.
 // The grounded detection system is based off of Brackey's code.
 
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +22,7 @@ public class EnemyAI : MonoBehaviour
     public float jumpHeight = 10;
 
     private bool walking = true;
+    private bool isDashing = false;
     private bool isGrounded;
     [HideInInspector]public bool followSomething = false;
     private bool canJump = false;
@@ -32,6 +32,7 @@ public class EnemyAI : MonoBehaviour
     private SpriteRenderer sr;
     private Animator anim;
     private Rigidbody2D rb;
+    public FollowCollisionCheck followCollisionCheck;
 
     private bool movingRight = true;
 
@@ -41,7 +42,6 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
-    // Initializing variables
         groundDetection = transform.GetChild(0).transform;
         wallDetection = transform.GetChild(1).transform;
         jumpDetection = transform.GetChild(2).transform;
@@ -62,15 +62,14 @@ public class EnemyAI : MonoBehaviour
         }
 
         // We've temporarily set the red and orange enemies as the "guinea pigs" for this code. They'll be much more restricted later on.
-        
         if (enemyColor == EnemyColor.red)
         {
             sr.color = Color.red;
             anim.SetBool("IsWalking", true);
 
             followSomething = false;                        
-            canJump = true;
-            canFall = true;
+            canJump = false;
+            canFall = false;
 
             MoveAround();               
         }
@@ -126,7 +125,7 @@ public class EnemyAI : MonoBehaviour
         Collider2D[] colliders2 = Physics2D.OverlapCircleAll(m_GroundCheck2.position, k_GroundedRadius, m_WhatIsGround);
         //Collider2D[] colliders = Physics2D.OverlapBoxAll(box1.position, transform.localScale * 2, 0, m_WhatIsGround); tested using a box, didn't work
 
-        for (int i = 0; i < colliders.Length; i++) //checking the first collider
+        for (int i = 0; i < colliders.Length; i++) //checking for the first collider
         {
             if (colliders[i].gameObject != gameObject)
             {
@@ -134,7 +133,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < colliders2.Length; i++) //checking the second collider
+        for (int i = 0; i < colliders2.Length; i++) //checking the second
         {
             if (colliders2[i].gameObject != gameObject)
             {
@@ -146,7 +145,7 @@ public class EnemyAI : MonoBehaviour
         {
             isGrounded = true;
 
-            // If the player wasn't grounded(i.e. in the air), we switch animations
+            // If the player wasn't grounded(i.e. in the air), we invoke the landing event(which is basically the animation switch)
             if (!wasGrounded)
                 anim.SetBool("IsJumping", false);
         }
@@ -157,9 +156,9 @@ public class EnemyAI : MonoBehaviour
             anim.SetBool("IsJumping", true);
         }
     }
-    private IEnumerator pauseAndJump()
-    {        
-    //This is related to the size of the enemy and the environment. Waiting a little bit before the next jump looks better.
+    private IEnumerator PauseAndJump()
+    {
+        //This is related to the size of the enemy and the environment. Waiting a little bit before the next jump looks better.
         rb.velocity += Vector2.up * jumpHeight;
         
         yield return new WaitForSeconds(2f);       
@@ -191,37 +190,114 @@ public class EnemyAI : MonoBehaviour
         RaycastHit2D jumpInfo = Physics2D.Raycast(jumpDetection.position, Vector2.right, distance, m_WhatIsGround);
 
         // First, we look for holes ahead. There must not be any walls, because that wouldn't be a hole!
-        if (groundInfo.collider == false && wallInfo.collider == false && isGrounded && !canFall)
+        if (groundInfo.collider == false && wallInfo.collider == false && isGrounded)
         {
-            if (movingRight == true)
+            if (isDashing)
             {
-                TurnLeft();
-            }
-            else
+                StartCoroutine(FallFromDash());
+                isDashing = false;
+            } else if (!canFall && !isDashing)
             {
-                TurnRight();
+                if (movingRight == true)
+                {
+                    TurnLeft();
+                }
+                else
+                {
+                    TurnRight();
+                }
             }
+            
         }
 
         //Checks for a jumpable space, in case there is a wall ahead.
         if (jumpInfo.collider == false && wallInfo.collider == true && canJump)
-        { 
-            StartCoroutine(pauseAndJump());
+        {   
+            StartCoroutine(PauseAndJump());
         }
 
         //Check For wall ahead
         if (wallInfo.collider == true && jumpInfo.collider == true)
         {
-            if (movingRight == true)
+            if (isDashing)
             {
-                TurnLeft();
-            }
-            else
+                // See notes on HitWallDash
+                //StartCoroutine(HitWallDash());
+            } else if (!isDashing)
             {
-                TurnRight();
+                if (movingRight == true)
+                {
+                    TurnLeft();
+                }
+                else
+                {
+                    TurnRight();
+                }
             }
+            
         }
     }
+
+    //----------------------------------------------
+    //------------------RED ENEMY-------------------
+    //----------------------------------------------
+    public IEnumerator RedDash(bool dashToTheRight)
+    {
+        if (dashToTheRight)
+        {
+            isDashing = true;
+            walking = false;
+            TurnRight();
+            yield return new WaitForSeconds(2f);
+            speed = speed * 2;
+            walking = true;
+
+        } else if (!dashToTheRight)
+        {
+            isDashing = true;
+            walking = false;
+            TurnLeft();
+            yield return new WaitForSeconds(2f);
+            speed *= 2;
+            walking = true;
+        }
+    }
+
+    //If the red enemy is currently dashing, it'll fall from platforms
+    private IEnumerator FallFromDash()
+    {
+        Debug.Log("fallfromdash");
+        if (movingRight)
+        {
+            walking = false;
+            rb.AddForce(Vector2.right * jumpHeight, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(5f);
+            speed /= 2;
+            walking = true;
+            yield return new WaitForSeconds(3f);
+            followCollisionCheck.DashIsFinished();
+        }
+        else
+        {
+            walking = false;
+            rb.velocity += -Vector2.right * jumpHeight;
+            yield return new WaitForSeconds(5f);
+            speed /= 2;
+            walking = true;
+            yield return new WaitForSeconds(3f);
+            followCollisionCheck.DashIsFinished();
+        }
+    }
+
+    // Since currently, because of collider distances, the enemy is going to interpret hitting the wall as a hole anyway,
+    // FallFromDash gets called naturally and works better than having a different coroutine. Yay!
+    /*private IEnumerator HitWallDash()
+    {
+        walking = false;
+        yield return new WaitForSeconds(5f);
+        speed /= 2;
+        walking = true;
+    }*/
 
     private void OnDrawGizmos()
     {
