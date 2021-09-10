@@ -30,3 +30,10 @@ C'est un jeu de puzzle-plateforme en cours de développement pour un client. Il 
 Il s'agit d'un projet du coeur qui se développe lentement après que nous (Lightkeeper's Machine) ayons créé un prototype pour Ludum Dare 48. C'est un twin-stick shooter qui se déroule entièrement dans un ascenseur, avec des monstres vous envahissant entre chaque étage. Tout comme des rogue-likes tels que Hadès ou Moonlighter, après votre mort, vous pouvez personnaliser votre expérience, acheter des bonus et améliorer votre ascenseur. L'idée est que le jeu se déroule dans votre esprit, alors que vous combattez vos démons intérieurs dans un établissement psychiatrique. Le code arrive très bientôt !
 
 Veuillez consulter notre page [itch.io](https://lightkeepersmachine.itch.io/). Je suis le programmeur de tout ce qui y est presenté, et vous pourrez voir une partie de mon code de première main !
+
+
+
+![image](https://user-images.githubusercontent.com/34780903/132883779-621abca4-0e5b-4046-a2f8-41e4a9a19326.png)
+
+
+Trans pride!
