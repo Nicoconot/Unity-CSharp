@@ -33,7 +33,4 @@ Veuillez consulter notre page [itch.io](https://lightkeepersmachine.itch.io/). J
 
 
 
-![image](https://user-images.githubusercontent.com/34780903/132883779-621abca4-0e5b-4046-a2f8-41e4a9a19326.png)
 
-
-Trans pride!
