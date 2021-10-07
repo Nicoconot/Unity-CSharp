@@ -15,6 +15,8 @@ Code to be added very soon!
 
 Please check out our [itch.io](https://lightkeepersmachine.itch.io/) page. I was the programmer to everything shown there, and you'll be able to see some of my code first hand!
 
+** Some of the code has been edited or ommited to preserve intellectual property. The scripts provided here are only a small part of the full project.
+
 
 ----------------
 
@@ -31,6 +33,8 @@ Il s'agit d'un projet du coeur qui se développe lentement après que nous (Ligh
 
 Veuillez consulter notre page [itch.io](https://lightkeepersmachine.itch.io/). Je suis le programmeur de tout ce qui y est presenté, et vous pourrez voir une partie de mon code de première main !
 
+    
+** Quelques parties du code ont étés omises ou éditées pour préserver notre propriété intellectuelle. Les scripts fournis ici sont seulement une petite partie du projet complet.
 
 
 
