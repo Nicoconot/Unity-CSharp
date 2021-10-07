@@ -24,7 +24,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Very sensitive number. Reference that works: 10")]
     public float jumpHeight = 10;
 
-    private bool walking = true;
+    private bool walking = false;
     private bool isDashing = false;
     private bool isGrounded;
     [HideInInspector]public bool followSomething = false;
@@ -37,7 +37,7 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody2D rb;
     public FollowCollisionCheck followCollisionCheck;
 
-    private bool movingRight = true;
+    [SerializeField]private bool movingRight = true;
 
     [SerializeField]private Transform groundDetection, wallDetection, jumpDetection;
 
@@ -53,13 +53,25 @@ public class EnemyAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        ChangeColors();
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        GroundedCheck();
+        GroundedCheck(); 
 
+        if (walking && enemyColor != EnemyColor.orange) MoveAround(); 
+    }
+
+
+    public void ChangeColors()
+    {
         if (enemyColor == EnemyColor.white)
         {
+            walking = false;
             anim.SetBool("IsWalking", false);
             sr.color = Color.white;
         }
@@ -67,50 +79,58 @@ public class EnemyAI : MonoBehaviour
         // We've temporarily set the red and orange enemies as the "guinea pigs" for this code. They'll be much more restricted later on.
         if (enemyColor == EnemyColor.red)
         {
+            walking = true;
             sr.color = Color.red;
             anim.SetBool("IsWalking", true);
 
-            followSomething = false;                        
+            followSomething = false;
             canJump = false;
             canFall = false;
-
-            MoveAround();               
+            
         }
 
         if (enemyColor == EnemyColor.orange)
         {
+            walking = false;
             anim.SetBool("IsWalking", true);
-            sr.color = new Color(1, 0.65f, 0);
+            sr.color = Colors.orange;
 
+            followSomething = false;
+            followTag = "Player";
+            canJump = false;
+            canFall = true;
+
+            StartCoroutine(OrangeJumpAround());
+        }
+        if (enemyColor == EnemyColor.yellow)
+        {
+            walking = true;
+            anim.SetBool("IsWalking", true);
+            sr.color = Color.yellow;
             followSomething = true;
             followTag = "Player";
             canJump = true;
             canFall = false;
-
-            MoveAround();
-        }
-        if (enemyColor == EnemyColor.yellow)
-        {
-            anim.SetBool("IsWalking", false);
-            sr.color = Color.yellow;
         }
         if (enemyColor == EnemyColor.green)
         {
+            walking = false;
             anim.SetBool("IsWalking", false);
             sr.color = Color.green;
         }
         if (enemyColor == EnemyColor.blue)
         {
+            walking = false;
             anim.SetBool("IsWalking", false);
             sr.color = Color.blue;
         }
         if (enemyColor == EnemyColor.purple)
         {
+            walking = false;
             anim.SetBool("IsWalking", false);
             sr.color = new Color(0.5f, 0, 0.8f);
         }
     }
-
     private void GroundedCheck()
     {
         bool wasGrounded = isGrounded;
@@ -148,9 +168,14 @@ public class EnemyAI : MonoBehaviour
         {
             isGrounded = true;
 
+
             // If the player wasn't grounded(i.e. in the air), we invoke the landing event(which is basically the animation switch)
             if (!wasGrounded)
+            {
                 anim.SetBool("IsJumping", false);
+                if (enemyColor == EnemyColor.orange) rb.velocity = Vector3.zero;
+            }
+                
         }
 
 
@@ -159,30 +184,38 @@ public class EnemyAI : MonoBehaviour
             anim.SetBool("IsJumping", true);
         }
     }
-    private IEnumerator PauseAndJump()
-    {
-        //This is related to the size of the enemy and the environment. Waiting a little bit before the next jump looks better.
-        rb.velocity += Vector2.up * jumpHeight;
-        
-        yield return new WaitForSeconds(2f);       
-    }
+
 
 
     public void TurnRight()
     {
+        Debug.Log("Turned right");
         transform.eulerAngles = new Vector3(0, 0, 0);
         movingRight = true;
+
+        if (enemyColor == EnemyColor.orange)
+            rb.velocity += Vector2.right * jumpHeight/2;
     }
 
     public void TurnLeft()
     {
+        Debug.Log("Turned left");
         transform.eulerAngles = new Vector3(0, -180, 0);
         movingRight = false;
+
+        if(enemyColor == EnemyColor.orange)
+            rb.velocity += Vector2.left * jumpHeight/2;
+        
     }
 
     private void MoveAround()
     {
-        if (walking) transform.Translate(Vector2.right * speed * Time.deltaTime);
+        
+        if (walking)
+        {
+            Debug.Log("I'm walking");
+            transform.Translate(Vector2.right * speed * Time.deltaTime);
+        }
 
         //This navigation system works by using 3 Raycast sources directly ahead of the enemy. One is at the bottom,
         // and is used to detect holes ahead. One is at the middle, and detects walls. One is above the head and 
@@ -197,45 +230,36 @@ public class EnemyAI : MonoBehaviour
         {
             if (isDashing)
             {
+                Debug.Log("Falling from dash...");
                 StartCoroutine(FallFromDash());
                 isDashing = false;
             } else if (!canFall && !isDashing)
             {
+                Debug.Log("Turning around");
                 if (movingRight == true)
-                {
-                    TurnLeft();
-                }
+                TurnLeft();
                 else
-                {
-                    TurnRight();
-                }
+                TurnRight();
             }
             
         }
 
         //Checks for a jumpable space, in case there is a wall ahead.
         if (jumpInfo.collider == false && wallInfo.collider == true && canJump)
-        {   
-            StartCoroutine(PauseAndJump());
-        }
+        StartCoroutine(PauseAndJump());
 
         //Check For wall ahead
         if (wallInfo.collider == true && jumpInfo.collider == true)
         {
+            Debug.Log("Dash turn");
             if (isDashing)
             {
                 // See notes on HitWallDash
                 //StartCoroutine(HitWallDash());
             } else if (!isDashing)
             {
-                if (movingRight == true)
-                {
-                    TurnLeft();
-                }
-                else
-                {
-                    TurnRight();
-                }
+                if (movingRight)  TurnLeft();
+                else  TurnRight();
             }
             
         }
@@ -246,6 +270,7 @@ public class EnemyAI : MonoBehaviour
     //----------------------------------------------
     public IEnumerator RedDash(bool dashToTheRight)
     {
+        Debug.Log("Dashing...");
         if (dashToTheRight)
         {
             isDashing = true;
@@ -302,12 +327,71 @@ public class EnemyAI : MonoBehaviour
         walking = true;
     }*/
 
+    //----------------------------------------------
+    //---------------ORANGE ENEMY-------------------
+    //----------------------------------------------
+
+    private IEnumerator OrangeJumpAround()
+    {
+        Debug.Log("OrangeJump");
+        while (true)
+        {
+            
+                rb.velocity += Vector2.up * (jumpHeight * 2);
+                yield return new WaitForSeconds(.05f);
+                if (movingRight) rb.velocity += Vector2.right * jumpHeight / 2;
+                if (!movingRight) rb.velocity += Vector2.left * jumpHeight / 2;
+
+                yield return new WaitForSeconds(2f);
+           
+            
+        }
+    }
+
+    private IEnumerator PauseAndJump()
+    {
+        Debug.Log("PauseNJump");
+        //This is related to the size of the enemy and the environment. Waiting a little bit before the next jump looks better.
+        rb.velocity += Vector2.up * jumpHeight;
+
+        yield return new WaitForSeconds(2f);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (enemyColor)
+        {
+            case EnemyColor.orange:
+                if (collision.CompareTag("LevelEndLeft"))
+                {
+                    Debug.Log("ReachedEndOfLevel");
+                    TurnLeft();                    
+                } else if (collision.CompareTag("LevelEndRight"))
+                {
+                    TurnRight();
+                }
+                break;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         // Gizmos are used to draw some representations in the editor to things happening elsewhere in the code. These represent the circle-
         // casts used in the groundcheck.
         Gizmos.DrawWireSphere(m_GroundCheck.position, k_GroundedRadius);
         Gizmos.DrawWireSphere(m_GroundCheck2.position, k_GroundedRadius);
-        
+        if (movingRight)
+        {
+            Gizmos.DrawRay(groundDetection.position, Vector2.right * distance);
+            Gizmos.DrawRay(wallDetection.position, Vector2.right * distance);
+            Gizmos.DrawRay(jumpDetection.position, Vector2.right * distance);
+        } else if (!movingRight)
+        {                                                    
+            Gizmos.DrawRay(groundDetection.position, Vector2.left * distance);
+            Gizmos.DrawRay(wallDetection.position, Vector2.left * distance);
+            Gizmos.DrawRay(jumpDetection.position, Vector2.left * distance);
+        }
     }
+
 }
